@@ -1,0 +1,9 @@
+﻿body {
+    padding: 48px;
+}
+.help-block {
+    visibility: hidden;
+}
+input:focus + .help-block {
+    visibility: visible;
+}
