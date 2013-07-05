@@ -42,7 +42,11 @@ module TfSteno {
                     result => window.location.href = '/signup/complete?signupEmail=' + $scope.registration.Email,
                     error => {
                         $scope.busy = false;
-                        $scope.alerts.push(new Alert('error', error.data));
+
+                        var errorMessage = error.status === 403
+                            ? 'Registration may only be performed using HTTPS. Please visit <a href="https://tfsteno.azurewebsites.net">https://tfsteno.azurewebsites.net</a>'
+                            : error.data;
+                        $scope.alerts.push(new Alert('error', errorMessage));
                     });
             };
         }
