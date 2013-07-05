@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Registrations]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Email] NVARCHAR(1024) NOT NULL, 
+    [Email] NVARCHAR(320) NOT NULL, 
     [TfsUrl] NVARCHAR(1024) NOT NULL, 
     [TfsUsername] NVARCHAR(1024) NOT NULL, 
     [TfsPassword] NVARCHAR(1024) NOT NULL
