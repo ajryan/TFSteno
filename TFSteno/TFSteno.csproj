@@ -593,12 +593,12 @@
     <Less Include="$(ProjectDir)Content\less\bootstrap.less" />
     <Less Include="$(ProjectDir)Content\less\bootstrap-responsive.less" />
   </ItemGroup>
-  <Target Name="DotLess" AfterTargets="AfterBuild" Inputs="@(Less)" Outputs="$(ProjectDir)Content\%(Less.Filename).css">
+  <Target Name="DotLess" AfterTargets="AfterBuild" Inputs="@(Less)" Outputs="$(ProjectDir)Content\%(Less.Filename).css" Condition=" '$(Configuration)' == 'Debug' ">
     <Message Text="dotLess..." Importance="High" />
     <Exec Command="&quot;$(SolutionDir)lib\dotless.compiler.exe&quot; &quot;%(Less.Identity)&quot; &quot;$(ProjectDir)Content\%(Less.Filename).css&quot;" />
     <Exec Command="&quot;$(SolutionDir)lib\dotless.compiler.exe&quot; -m &quot;%(Less.Identity)&quot; &quot;$(ProjectDir)Content\%(Less.Filename).min.css&quot;" />
   </Target>
-  <Target Name="TypeScript" AfterTargets="AfterBuild" Inputs="@(TypeScriptCompile)" Outputs="%(relativedir)%(filename).js">
+  <Target Name="TypeScript" AfterTargets="AfterBuild" Inputs="@(TypeScriptCompile)" Outputs="%(relativedir)%(filename).js" Condition=" '$(Configuration)' == 'Debug' ">
     <Message Text="TypeScript..." Importance="High" />
     <Exec Command="tsc --target ES5 @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
   </Target>
