@@ -5,6 +5,7 @@ namespace TFSteno.Controllers
 {
     public class SignupController : Controller
     {
+        [RequireHttps]
         public ActionResult Landing()
         {
             ViewBag.Title = "Team Foundation Stenographer - Sign Up";
