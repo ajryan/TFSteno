@@ -28,7 +28,7 @@ var TfSteno;
                 }, function (error) {
                     $scope.busy = false;
 
-                    var errorMessage = error.status === 403 ? 'Registration may only be performed using HTTPS. Please visit <a href="https://tfsteno.azurewebsites.net">https://tfsteno.azurewebsites.net</a>' : error.data;
+                    var errorMessage = error.status === 403 ? 'Registration may only be performed using HTTPS. Please visit https://tfsteno.azurewebsites.net' : error.data;
                     $scope.alerts.push(new Alert('error', errorMessage));
                 });
             };
