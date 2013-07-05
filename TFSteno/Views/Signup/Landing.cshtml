@@ -1,0 +1,52 @@
+﻿<div class="page-header">
+    <h3>Sign Up</h3>
+</div>
+<div class="row">
+    <div class="span5">
+        <div class="hero-unit">
+            <h2>Team Foundation Stenographer</h2>
+            <h3>Work item discussion recorder.</h3>
+            <p>Email TF Stenographer at <strong>workitemid@@&#8203;tfstenographer.&#8203;azurewebsites.net</strong>. Your email text will be added to the History of the Work Item. Attachments are added too.</p>
+        </div>
+    </div>
+    <div class="span7" ng-controller="TfSteno.SignupCtrl">
+        <form novalidate>
+            <fieldset>
+                <div class="control-group" ng-class="{:error}">
+                    <label for="email">Email Address</label>
+                    <input ng-model="registration.Email" id="email" name="email" type="email" placeholder="someone@example.com" autofocus="autofocus" />
+                    <span class="help-inline">Send to work items from this address.</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="tfsUrl">TFS Collection URL</label>
+                    <input ng-model="registration.TfsUrl" id="tfsUrl" name="tfsUrl" type="url" placeholder="http://mysite.visualstudio.com/DefaultCollection" />
+                    <span class="help-inline">Public TFS project collection URL.</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="tfsUsername">TFS Username</label>
+                    <input ng-model="registration.TfsUsername" id="tfsUsername" name="tfsUsername" type="text" placeholder="username" />
+                    <span class="help-inline">Your TFS Username.</span>
+                </div>
+                <div class="control-group">
+                    <label for="tfsPassword">TFS Password</label>
+                    <input ng-model="registration.TfsPassword" id="tfsPassword" name="tfsPassword" type="password" />
+                    <span class="help-inline">Your TFS Password.</span>
+                    <div>See <a href="" tabindex="-1">here</a> for instructions on enabling alternate credentials on TF Service.</div>
+                </div>
+                
+                <button type="submit"
+                        class="btn btn-primary"
+                        ng-class="{busy:loading}"
+                        ng-disabled="busy"
+                        ng-click="signUp()">
+                    {{busy && 'Signing up...' || 'Sign Up'}}
+                </button>
+            </fieldset>
+        </form>
+        <div class="form-alerts">
+            <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+        </div>
+    </div>
+</div>
