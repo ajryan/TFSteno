@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace TFSteno.ApiControllers
         private static readonly string _ConnectionString = 
             ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public Registration Post([FromBody] Registration registration)
+        public int Post([FromBody] Registration registration)
         {
 #if !DEBUG
             // Require HTTPS
@@ -28,7 +29,6 @@ namespace TFSteno.ApiControllers
             // TODO: validate syntax. web api dataannotations vaildate support?
             // TODO: validate TFS is real
             // TODO: send a verification email. SendGrid API?
-            // TODO: unique constraint on email, catch specific error number and return specific message
             try
             {
                 registration.TfsUrl = Crypt.Encrypt(registration.TfsUrl);
@@ -43,25 +43,44 @@ namespace TFSteno.ApiControllers
                         "INSERT [Registrations] (Email, TfsUrl, TfsUsername, TfsPassword) VALUES (@Email, @TfsUrl, @TfsUsername, @TfsPassword);" +
                         "SELECT cast(scope_identity() as int);", registration);
 
-                    registration.Id = id;
-                    return registration;
+                    return id;
                 }
             }
             catch (SqlException sqlEx)
             {
-                string errorMessage = sqlEx.Errors.Cast<SqlError>().Any(e => e.Number == 2601)
-                    ? String.Format("A user with the address {0} is already signed up.", registration.Email)
-                    : "A database error occurred.";
-
-                throw new HttpResponseException(
-                    new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent(errorMessage) });
+                if (sqlEx.Errors.Cast<SqlError>().Any(e => e.Number == 2601))
+                {
+                    throw new HttpResponseException(
+                        new HttpResponseMessage(HttpStatusCode.Conflict)
+                        {
+                            Content = new StringContent(String.Format("A user with the address {0} is already signed up.", registration.Email))
+                        });
+                }
+                
+                ThrowGenericError("A database error occurred.", sqlEx);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: log with an ID and give the ID in response so they can ask about it. ELMAH?
-                throw new HttpResponseException(
-                    new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content= new StringContent("Unexpected error") });
+                ThrowGenericError("An unexpected error occurred.", ex);
             }
+            return -1;
+        }
+
+        private void ThrowGenericError(string message, Exception exception)
+        {
+            var errorGuid = Guid.NewGuid();
+
+            Trace.TraceError("ERROR {0}:\r\n{1}", errorGuid, exception);
+
+            string fullMessage = String.Format(
+                "{0}\r\nIf this error persists, please email ryan.aidan@gmail.com and reference error ID {1}.",
+                message, errorGuid);
+
+            throw new HttpResponseException(
+                new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content= new StringContent(fullMessage)
+                });
         }
     }
 }
