@@ -14,26 +14,26 @@
             <fieldset>
                 <div class="control-group">
                     <label for="email">Email Address</label>
-                    <input ng-model="registration.Email" id="email" name="email" type="email" placeholder="someone@example.com" autofocus="autofocus" />
+                    <input ng-model="registration.Email" id="email" name="email" type="email" placeholder="someone@example.com" autofocus required />
                     <span class="help-inline">Send to work items from this address.</span>
                 </div>
                 
                 <div class="control-group">
                     <label for="tfsUrl">TFS Collection URL</label>
-                    <input ng-model="registration.TfsUrl" id="tfsUrl" name="tfsUrl" type="url" placeholder="http://mysite.visualstudio.com/DefaultCollection" />
+                    <input ng-model="registration.TfsUrl" id="tfsUrl" name="tfsUrl" type="url" placeholder="http://mysite.visualstudio.com/DefaultCollection" required />
                     <span class="help-inline">Public TFS project collection URL.</span>
                 </div>
                 
                 <div class="control-group">
                     <label for="tfsUsername">TFS Username</label>
-                    <input ng-model="registration.TfsUsername" id="tfsUsername" name="tfsUsername" type="text" placeholder="username" />
+                    <input ng-model="registration.TfsUsername" id="tfsUsername" name="tfsUsername" type="text" placeholder="username" required />
                     <span class="help-inline">Your TFS Username.</span>
                 </div>
                 <div class="control-group">
                     <label for="tfsPassword">TFS Password</label>
-                    <input ng-model="registration.TfsPassword" id="tfsPassword" name="tfsPassword" type="password" />
+                    <input ng-model="registration.TfsPassword" id="tfsPassword" name="tfsPassword" type="password" required />
                     <span class="help-inline">Your TFS Password.</span>
-                    <div>See<a href="http://blogs.msdn.com/b/buckh/archive/2013/01/07/how-to-connect-to-tf-service-without-a-prompt-for-liveid-credentials.aspx" tabindex="-1">here</a> for instructions on enabling alternate credentials on TF Service.</div>
+                    <div>See <a href="http://blogs.msdn.com/b/buckh/archive/2013/01/07/how-to-connect-to-tf-service-without-a-prompt-for-liveid-credentials.aspx" tabindex="-1">here</a> for instructions on enabling alternate credentials on Team Foundation Service.</div>
                 </div>
                 
                 <button type="submit"
