@@ -9,5 +9,7 @@ namespace TFSteno.Models
         public string TfsUrl { get; set; }
         public string TfsUsername { get; set; }
         public string TfsPassword { get; set; }
+        public string ConfirmationCode { get; set; }
+        public bool Confirmed { get; set; }
     }
 }

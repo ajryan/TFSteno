@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TFSteno.Models;
+using TFSteno.Services;
 
 namespace TFSteno.ApiControllers
 {
@@ -32,7 +33,12 @@ namespace TFSteno.ApiControllers
             try
             {
                 string responseContent;
-                if (workItemEmail.WorkItemId == -1)
+                if (workItemEmail.Admin)
+                {
+                    responseContent = "Your message has been logged for the administrator.";
+                    Trace.TraceInformation("Admin mail received.");
+                }
+                else if (workItemEmail.WorkItemId == -1)
                 {
                     responseContent = "To address must be WorkItemId@tfssteno.aidanjryan.com";
                     Trace.TraceInformation("Bad or missing work item ID in to address.");
@@ -53,6 +59,9 @@ namespace TFSteno.ApiControllers
             {
                 string errorMessage = "Failed to save work item with exception: " + ex;
                 Trace.TraceInformation(errorMessage);
+
+                EmailService.SendFailureEmail(workItemEmail);
+
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(errorMessage)

@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using TFSteno.Services;
 
 namespace TFSteno.Models
 {
     public class WorkItemEmail
     {
-        public int WorkItemId { get; set; }
+        public bool Admin { get; private set; }
+        public int WorkItemId { get; private set; }
+        public string From { get; private set; }
+
         public string HistoryText
         {
             get
@@ -31,11 +34,21 @@ namespace TFSteno.Models
             switch (partName.Replace("\"", String.Empty).ToUpper())
             {
                 case "TO":
-                    int workItemId;
-                    string trimmedTo = partText.Replace("\"", String.Empty);
-                    Trace.TraceInformation("Parsing ID from " + trimmedTo);
-                    if (Int32.TryParse(trimmedTo.Substring(0, trimmedTo.IndexOf('@')), out workItemId))
-                        WorkItemId = workItemId;
+                    if (partText.Equals("admin", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Admin = true;
+                    }
+                    else
+                    {
+                        int workItemId;
+                        string trimmedTo = partText.Replace("\"", String.Empty);
+                        Trace.TraceInformation("Parsing ID from " + trimmedTo);
+                        if (Int32.TryParse(trimmedTo.Substring(0, trimmedTo.IndexOf('@')), out workItemId))
+                            WorkItemId = workItemId;
+                    }
+                    break;
+                case "FROM":
+                    From = partText;
                     break;
                 case "SUBJECT":
                     _subject = partText;
@@ -52,16 +65,13 @@ namespace TFSteno.Models
 
         public void Save()
         {
-            string tfsUserName = ConfigurationManager.AppSettings["tfsUserName"];
-            string tfsPassword = ConfigurationManager.AppSettings["tfsPassword"];
-            string tfsUrl = ConfigurationManager.AppSettings["tfsUrl"];
-            string tfsProjectName = ConfigurationManager.AppSettings["tfsProject"];
+            var registration = RegistrationService.GetRegistration(From);
 
-            var networkCred = new NetworkCredential(tfsUserName, tfsPassword);
+            var networkCred = new NetworkCredential(registration.TfsUsername, registration.TfsPassword);
             var basicCred = new BasicAuthCredential(networkCred);
             var tfsCred = new TfsClientCredentials(basicCred) {AllowInteractive = false};
 
-            var teamProjectColl = new TfsTeamProjectCollection(new Uri(tfsUrl), tfsCred);
+            var teamProjectColl = new TfsTeamProjectCollection(new Uri(registration.TfsUrl), tfsCred);
             teamProjectColl.Authenticate();
 
             var workItemService = teamProjectColl.GetService<WorkItemStore>();

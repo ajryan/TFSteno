@@ -1,0 +1,24 @@
+﻿@using TFSteno.Services
+@model RegistrationService.ConfirmationOutcome
+
+<div class="container">
+    <div class="hero-unit">
+        <h2>Confirmation @(Model == RegistrationService.ConfirmationOutcome.Success? "Success!" : "Failed")</h2>
+
+        <p>
+            @switch (Model)
+            {
+                case RegistrationService.ConfirmationOutcome.AlreadyConfirmed:
+                    @:Your email address was already confirmed.
+                    break;
+                case RegistrationService.ConfirmationOutcome.NotExist:
+                    @:A registration with this confirmation code was not found.
+                    break;
+                case RegistrationService.ConfirmationOutcome.Success:
+                    @:Your email address has been confirmed. You may now send emails to &lt;WorkItemId&gt;@@tfsteno.azurewebsites.net.
+                    break;
+            }
+        </p>
+    </div>
+</div>
+
