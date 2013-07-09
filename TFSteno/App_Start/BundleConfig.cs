@@ -11,6 +11,7 @@ namespace TFSteno
                 //"~/Scripts/bootstrap.js",
                 "~/Scripts/angular.js",
                 "~/Scripts/ui-bootstrap-tpls-{version}.js",
+                "~/app/models.js",
                 "~/app/signup.js"));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
