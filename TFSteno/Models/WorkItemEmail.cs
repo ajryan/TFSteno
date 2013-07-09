@@ -82,7 +82,7 @@ namespace TFSteno.Models
 
         public override string ToString()
         {
-            return String.Format("ID: {0}; Text: {1}", WorkItemId, HistoryText);
+            return String.Format("ID: {0}; From: {1}; Text: {2}", WorkItemId, From, HistoryText);
         }
     }
 }
