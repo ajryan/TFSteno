@@ -24,14 +24,14 @@ namespace TFSteno.Services
         public static void SendConfirmationEmail(string to, string confirmationCode)
         {
             string body = "Please click the following link to confirm your email address: https://tfsteno.azurewebsites.net/Signup/Confirm?confirmationCode=" + confirmationCode;
-            SendEmail("admin@tfsteno.azurewebsites.net", null, to, "TF Steno Email Confirmation", body);
+            SendEmail("admin@tfsteno.aidanjryan.com", null, to, "TF Steno Email Confirmation", body);
             
         }
 
         public static void SendFailureEmail(WorkItemEmail workItemEmail)
         {
             SendEmail(
-                "admin@tfsteno.azurewebsites.net", null, workItemEmail.From,
+                "admin@tfsteno.aidanjryan.com", null, workItemEmail.From,
                 "[TFSteno] Failed to save work item",
                 String.Format("Failed to save your data.\r\nWork Item Id: {0}; History Text: {1}", workItemEmail.WorkItemId, workItemEmail.HistoryText));
         }
