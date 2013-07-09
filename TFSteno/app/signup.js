@@ -2,15 +2,6 @@ angular.module('TfSteno', ['ui.bootstrap']);
 
 var TfSteno;
 (function (TfSteno) {
-    var Alert = (function () {
-        function Alert(type, msg) {
-            this.type = type;
-            this.msg = msg;
-        }
-        return Alert;
-    })();
-    TfSteno.Alert = Alert;
-
     var SignupCtrl = (function () {
         function SignupCtrl($scope, $http) {
             $scope.alerts = [];
@@ -22,7 +13,7 @@ var TfSteno;
 
             $scope.signUp = function () {
                 if ($scope.registrationForm.$invalid) {
-                    $scope.alerts = [new Alert('warning', 'Please enter valid values for all fields.')];
+                    $scope.alerts = [new TfSteno.Alert('warning', 'Please enter valid values for all fields.')];
                     return;
                 }
 
@@ -34,7 +25,7 @@ var TfSteno;
                     $scope.busy = false;
 
                     var errorMessage = error.status === 403 ? 'Registration may only be performed using HTTPS. Please visit https://tfsteno.azurewebsites.net' : error.data;
-                    $scope.alerts.push(new Alert('error', errorMessage));
+                    $scope.alerts.push(new TfSteno.Alert('error', errorMessage));
                 });
             };
         }
