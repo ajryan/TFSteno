@@ -8,7 +8,6 @@ namespace TFSteno
         {
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                 "~/Scripts/jquery-{version}.js",
-                //"~/Scripts/bootstrap.js",
                 "~/Scripts/angular.js",
                 "~/Scripts/ui-bootstrap-tpls-{version}.js",
                 "~/app/models.js",
