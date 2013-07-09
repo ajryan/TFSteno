@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Mail;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using TFSteno.Services;
@@ -65,7 +66,8 @@ namespace TFSteno.Models
 
         public void Save()
         {
-            var registration = RegistrationService.GetRegistration(From);
+            var fromAddress = new MailAddress(From);
+            var registration = RegistrationService.GetRegistration(fromAddress.Address);
 
             var networkCred = new NetworkCredential(registration.TfsUsername, registration.TfsPassword);
             var basicCred = new BasicAuthCredential(networkCred);
