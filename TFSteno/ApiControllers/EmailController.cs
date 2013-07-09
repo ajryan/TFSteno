@@ -49,7 +49,7 @@ namespace TFSteno.ApiControllers
                     workItemEmail.Save();
                 }
             }
-            catch (ConfirmationException ex)
+            catch (ConfirmationException)
             {
                 Trace.TraceInformation("Got work item email from un-confirmed email.");
             }
