@@ -34,7 +34,7 @@ namespace TFSteno.ApiControllers
 
         private static void ThrowRegistrationError(RegistrationService.RegistrationResult registerResult)
         {
-            var httpCode = (registerResult.Outcome == RegistrationService.RegistrationOutcome.Conflict)
+            var httpCode = (registerResult.Outcome == RegistrationService.RegistrationOutcome.EmailConflict)
                 ? HttpStatusCode.Conflict
                 : HttpStatusCode.InternalServerError;
             string fullMessage = registerResult.ErrorMessage;

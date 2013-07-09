@@ -15,7 +15,8 @@ namespace TFSteno.Services
         public enum RegistrationOutcome
         {
             Success,
-            Conflict,
+            TfsConnectFailure,
+            EmailConflict,
             OtherError
         }
 
@@ -38,6 +39,21 @@ namespace TFSteno.Services
         public static RegistrationResult SaveRegistration(Registration registration)
         {
             var confirmationCode = Guid.NewGuid().ToString("N");
+
+            try
+            {
+                var teamProjectColl = TeamService.GetCollection(registration.TfsUrl, registration.TfsUsername, registration.TfsPassword);
+                teamProjectColl.EnsureAuthenticated();
+            }
+            catch (Exception ex)
+            {
+                return new RegistrationResult
+                {
+                    Outcome = RegistrationOutcome.TfsConnectFailure,
+                    ErrorMessage = "Failed to connect to the specified TFS: " + ex.Message,
+                    Exception = ex
+                };
+            }
 
             try
             {
@@ -73,7 +89,7 @@ namespace TFSteno.Services
                 var sqlEx = ex as SqlException;
                 if (sqlEx != null && sqlEx.Errors.Cast<SqlError>().Any(e => e.Number == 2601))
                 {
-                    result.Outcome = RegistrationOutcome.Conflict;
+                    result.Outcome = RegistrationOutcome.EmailConflict;
                     result.ErrorMessage = String.Format("A user with the address {0} is already signed up.",
                         registration.Email);
                 }

@@ -69,12 +69,7 @@ namespace TFSteno.Models
             var fromAddress = new MailAddress(From);
             var registration = RegistrationService.GetRegistration(fromAddress.Address);
 
-            var networkCred = new NetworkCredential(registration.TfsUsername, registration.TfsPassword);
-            var basicCred = new BasicAuthCredential(networkCred);
-            var tfsCred = new TfsClientCredentials(basicCred) {AllowInteractive = false};
-
-            var teamProjectColl = new TfsTeamProjectCollection(new Uri(registration.TfsUrl), tfsCred);
-            teamProjectColl.Authenticate();
+            var teamProjectColl = TeamService.GetCollection(registration.TfsUrl, registration.TfsUsername, registration.TfsPassword);
 
             var workItemService = teamProjectColl.GetService<WorkItemStore>();
             var workItem = workItemService.GetWorkItem(WorkItemId);
