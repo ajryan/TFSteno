@@ -21,6 +21,11 @@ var TfSteno;
             };
 
             $scope.signUp = function () {
+                if ($scope.registrationForm.$invalid) {
+                    $scope.alerts = [new Alert('warning', 'Please enter valid values for all fields.')];
+                    return;
+                }
+
                 $scope.alerts = [];
                 $scope.busy = true;
                 $http.post('/api/Registration', angular.toJson($scope.registration)).then(function (result) {

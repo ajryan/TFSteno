@@ -19,6 +19,7 @@ module TfSteno {
         busy: boolean;
         closeAlert(index: number): void;
         signUp(): void;
+        registrationForm: any;
         registration: Registration;
     }
 
@@ -34,6 +35,11 @@ module TfSteno {
             };
 
             $scope.signUp = () => {
+                if ($scope.registrationForm.$invalid) {
+                    $scope.alerts = [new Alert('warning','Please enter valid values for all fields.')];
+                    return;
+                }
+
                 $scope.alerts = [];
                 $scope.busy = true;
                 $http.post('/api/Registration',
