@@ -192,7 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\models.ts" />
-    <Content Include="app\interfaces.js">
+    <Content Include="app\models.js">
       <DependentUpon>models.ts</DependentUpon>
     </Content>
     <Content Include="Views\Signup\Complete.cshtml" />
