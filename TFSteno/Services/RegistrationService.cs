@@ -88,13 +88,21 @@ namespace TFSteno.Services
 
         public static Registration GetRegistration(string email)
         {
+            Registration registration;
+            
             using (var conn = new SqlConnection(_ConnectionString))
             {
                 conn.Open();
-                return conn
+                registration = conn
                     .Query<Registration>("SELECT * FROM Registrations WHERE [Email] = @Email", new { Email = email })
                     .Single();
             }
+
+            registration.TfsUrl = Crypt.Decrypt(registration.TfsUrl);
+            registration.TfsUsername = Crypt.Decrypt(registration.TfsUsername);
+            registration.TfsPassword = Crypt.Decrypt(registration.TfsPassword);
+
+            return registration;
         }
 
         public static ConfirmationOutcome ConfirmRegistration(string confirmationCode)
