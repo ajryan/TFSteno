@@ -9,7 +9,7 @@
             <p>Email TF Stenographer at <strong>workitemid@@&#8203;tfstenographer.&#8203;azurewebsites.net</strong>. Your email text will be added to the History of the Work Item. @*Attachments are added too.*@</p>
         </div>
     </div>
-    <div class="span7" ng-controller="TfSteno.SignupCtrl">
+    <div class="span7" ng-controller="TfSteno.SignupCtrl" ng-cloak>
         <form name="registrationForm" novalidate>
             <fieldset>
                 <div class="control-group">
@@ -37,7 +37,7 @@
                 </div>
                 
                 <button type="submit"
-                        class="btn btn-primary"
+                        class="btn btn-primary btn-large"
                         ng-class="{busy:loading}"
                         ng-disabled="busy"
                         ng-click="signUp()">
