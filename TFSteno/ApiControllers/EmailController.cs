@@ -11,6 +11,9 @@ namespace TFSteno.ApiControllers
 {
     public class EmailController : ApiController
     {
+        // Handle POST from SendGrid. Message content is irrelevant, just need to send 200 OK,
+        // otherwise SendGrid will retry for several days.
+
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
             var workItemEmail = new WorkItemEmail();
@@ -32,41 +35,31 @@ namespace TFSteno.ApiControllers
 
             try
             {
-                string responseContent;
                 if (workItemEmail.Admin)
                 {
-                    responseContent = "Your message has been logged for the administrator.";
-                    Trace.TraceInformation("Admin mail received.");
+                    Trace.TraceInformation("Admin mail received: " + workItemEmail.ToString());
                 }
                 else if (workItemEmail.WorkItemId == -1)
                 {
-                    responseContent = "To address must be WorkItemId@tfssteno.aidanjryan.com";
                     Trace.TraceInformation("Bad or missing work item ID in to address.");
                 }
                 else
                 {
-                    responseContent = "Appended to history of work item ID " + workItemEmail.WorkItemId;
+                    Trace.TraceInformation("Save history to workitem id " + workItemEmail.WorkItemId);
                     workItemEmail.Save();
-                    Trace.TraceInformation("Saved history to workitem id " + workItemEmail.WorkItemId);
                 }
-
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(responseContent)
-                };
+            }
+            catch (ConfirmationException ex)
+            {
+                Trace.TraceInformation("Got work item email from un-confirmed email.");
             }
             catch (Exception ex)
             {
-                string errorMessage = "Failed to save work item with exception: " + ex;
-                Trace.TraceInformation(errorMessage);
-
+                Trace.TraceInformation("Failed to save work item with exception: " + ex);
                 EmailService.SendFailureEmail(workItemEmail);
-
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(errorMessage)
-                };
             }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

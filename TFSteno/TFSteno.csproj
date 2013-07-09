@@ -182,6 +182,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\ConfirmationException.cs" />
     <Compile Include="Services\RegistrationService.cs" />
     <Compile Include="Services\TeamService.cs" />
   </ItemGroup>

@@ -69,6 +69,11 @@ namespace TFSteno.Models
             var fromAddress = new MailAddress(From);
             var registration = RegistrationService.GetRegistration(fromAddress.Address);
 
+            if (!registration.Confirmed)
+            {
+                EmailService.SendConfirmationEmail(registration.Email, registration.ConfirmationCode);
+                throw new ConfirmationException(registration.Email);
+            }
             var teamProjectColl = TeamService.GetCollection(registration.TfsUrl, registration.TfsUsername, registration.TfsPassword);
 
             var workItemService = teamProjectColl.GetService<WorkItemStore>();
